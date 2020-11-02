@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context=".AddItemActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingRight="22dp"
+        android:paddingLeft="22dp"
+        android:gravity="center_vertical">
+        <!-- android:background="@null"-->
+        <EditText
+            android:id="@+id/add_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/hint_add_item"
+            android:inputType="text"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/add_item_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:hint="@string/rub"
+            android:inputType="number"
+            android:maxLines="1" />
+
+        <Button
+            android:enabled="false"
+            android:id="@+id/add_item_btn"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginLeft="22dp"
+            android:background="@drawable/ic_add"
+            android:src="@drawable/ic_add" />
+    </LinearLayout>
+
+</LinearLayout>

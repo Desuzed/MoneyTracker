@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">MoneyTracker</string>
     <string name="hello_vasya">Привет Вася</string>
+    <string name="add_item_title">Новая запись</string>
+    <string name="hint_add_item">Название</string>
+    <string name="rub">0₽</string>
+    <string name="activity_item_list_title">Учёт бюджета</string>
+
+
 </resources>
