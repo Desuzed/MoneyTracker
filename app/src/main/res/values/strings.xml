@@ -5,7 +5,14 @@
     <string name="hint_add_item">Название</string>
     <string name="rub">0₽</string>
     <string name="activity_item_list_title">Учёт бюджета</string>
-    <string name="aboutcat">У кота по имени %1$s %2$s лапы, %3$s хвост. Ему %4$d лет</string>
+    <string name="tab_outcome">Расход</string>
+    <string name="tab_income">Доход</string>
+    <string name="tab_balance">Баланс</string>
 
+    <string-array name="tab_titles">
+        <item >@string/tab_outcome</item>
+        <item >@string/tab_income</item>
+        <item >@string/tab_balance</item>
+    </string-array>
 
 </resources>

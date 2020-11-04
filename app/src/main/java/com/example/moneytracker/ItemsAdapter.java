@@ -20,7 +20,8 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Log.d(ItemListActivity.TAG, "onCreateViewHolder: " + parent.getChildCount());
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_record, parent, false);
+        //Метод inflate преобразует разметку(текст) из xml файла в объект класса View и ViewGroup
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         return new ItemViewHolder(view);
     }
 
