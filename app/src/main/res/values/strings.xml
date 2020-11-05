@@ -4,7 +4,7 @@
     <string name="add_item_title">Новая запись</string>
     <string name="hint_add_item">Название</string>
     <string name="rub">0₽</string>
-    <string name="activity_item_list_title">Учёт бюджета</string>
+    <string name="main_screen_title">Учёт бюджета</string>
     <string name="tab_outcome">Расход</string>
     <string name="tab_income">Доход</string>
     <string name="tab_balance">Баланс</string>

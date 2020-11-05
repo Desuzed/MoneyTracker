@@ -12,11 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
-    private List<ItemRecord> data = new ArrayList<>();
+    private List<Item> data = new ArrayList<>();
 
-    public ItemsAdapter() {
-        createData();
+    public void setData (List<Item> data ){
+        this.data = data;
+        notifyDataSetChanged();
     }
+  /*  public ItemsAdapter() {
+        createData();
+    }*/
 
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Log.d(ItemListActivity.TAG, "onCreateViewHolder: " + parent.getChildCount());
@@ -28,7 +32,7 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         // Log.d(ItemListActivity.TAG, "onBindViewHolder: " + itemListActivity.recyclerView.getChildCount() + " " + position);
-        ItemRecord record = data.get(position);
+        Item record = data.get(position);
         holder.applyData(record);
     }
 
@@ -48,29 +52,29 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
         }
 
-        public void applyData(ItemRecord record) {
+        public void applyData(Item item) {
             //  Log.d(ItemListActivity.TAG, "applyData: " + itemListActivity.recyclerView.getChildLayoutPosition(itemView) + " " + record.getTitle());
-            title.setText(record.getTitle());
-            String str = String.valueOf(record.getPrice()) + " ₽";
+            title.setText(item.name);
+            String str = String.valueOf(item.price + " ₽");
             price.setText(str);
         }
     }
 
-    private void createData() {
-        data.add(new ItemRecord("Молоко", 35));
-        data.add(new ItemRecord("Курсы", 50));
-        data.add(new ItemRecord("Работа", 500));
-        data.add(new ItemRecord("Сладкое", 523));
-        data.add(new ItemRecord("Вредная еда", 552));
-        data.add(new ItemRecord("Еда", 2412));
-        data.add(new ItemRecord("Хозяйство", 656));
-        data.add(new ItemRecord("Регулярные платежи", 8543));
-        data.add(new ItemRecord("Мобильная связь", 6321));
-        data.add(new ItemRecord("Свадьба", 3467));
-        data.add(new ItemRecord("Огород", 37));
-        data.add(new ItemRecord("Сад", 999));
-        data.add(new ItemRecord("Собака", 647));
-        data.add(new ItemRecord("Кошка", 235));
-        data.add(new ItemRecord("Компик", 65000));
-    }
+//    private void createData() {
+//        data.add(new Item("Молоко", 35));
+//        data.add(new Item("Курсы", 50));
+//        data.add(new Item("Работа", 500));
+//        data.add(new Item("Сладкое", 523));
+//        data.add(new Item("Вредная еда", 552));
+//        data.add(new Item("Еда", 2412));
+//        data.add(new Item("Хозяйство", 656));
+//        data.add(new Item("Регулярные платежи", 8543));
+//        data.add(new Item("Мобильная связь", 6321));
+//        data.add(new Item("Свадьба", 3467));
+//        data.add(new Item("Огород", 37));
+//        data.add(new Item("Сад", 999));
+//        data.add(new Item("Собака", 647));
+//        data.add(new Item("Кошка", 235));
+//        data.add(new Item("Компик", 65000));
+//    }
 }

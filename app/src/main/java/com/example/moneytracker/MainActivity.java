@@ -1,6 +1,7 @@
 package com.example.moneytracker;
 
 import android.os.Bundle;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -14,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setActionBar(toolbar);
         pager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tabLayout);
         MainPagesAdapter adapter = new MainPagesAdapter(getSupportFragmentManager(), this);

@@ -3,19 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@drawable/background1"
     android:orientation="vertical"
     tools:context=".AddItemActivity">
 
+    <Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/background"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"></Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="68dp"
         android:background="@color/white"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingRight="22dp"
         android:paddingLeft="22dp"
-        android:gravity="center_vertical">
+        android:paddingRight="22dp">
         <!-- android:background="@null"-->
         <EditText
             android:id="@+id/add_item_name"
@@ -38,12 +44,12 @@
             android:maxLines="1" />
 
         <Button
-            android:enabled="false"
             android:id="@+id/add_item_btn"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_marginLeft="22dp"
             android:background="@drawable/ic_add"
+            android:enabled="false"
             android:src="@drawable/ic_add" />
     </LinearLayout>
 
