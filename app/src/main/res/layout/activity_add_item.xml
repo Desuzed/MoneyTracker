@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background1"
     android:orientation="vertical"
     tools:context=".AddItemActivity">
 
@@ -12,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/background"
+        android:elevation="0dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"></Toolbar>
 
     <LinearLayout
@@ -21,7 +21,8 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="22dp"
-        android:paddingRight="22dp">
+        android:paddingRight="22dp"
+        android:elevation="12dp">
         <!-- android:background="@null"-->
         <EditText
             android:id="@+id/add_item_name"

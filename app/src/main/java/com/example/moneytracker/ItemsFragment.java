@@ -1,6 +1,8 @@
 package com.example.moneytracker;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -30,8 +33,10 @@ public class ItemsFragment extends Fragment {
     private FloatingActionButton fab;
     private static final String TYPE_KEY = "type";
     private final static int DATA_LOADED = 100;
+    private static final int ADD_ITEM_REQUEST_CODE = 123;
     private String type;
     private Api api;
+    private SwipeRefreshLayout refreshLayout;
     //    private static final int TYPE_UNKNOWN = -1;
 //    public static final int TYPE_INCOMES = 0;
 //    public static final int TYPE_EXPENSES = 1;
@@ -76,11 +81,20 @@ public class ItemsFragment extends Fragment {
             public void onClick(View view) {
                 Log.d(TAG, "onClick: button pressed" );
                 Intent intent = new Intent(getContext(), AddItemActivity.class);
-                startActivity(intent);
+                intent.putExtra(AddItemActivity.TYPE_KEY, type);
+                startActivityForResult(intent, ADD_ITEM_REQUEST_CODE);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+        refreshLayout = view.findViewById(R.id.refreshSwipe);
+        refreshLayout.setColorSchemeColors(Color.CYAN);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadItems();
+            }
+        });
         loadItems();
     }
     private void loadItems (){
@@ -89,15 +103,30 @@ public class ItemsFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
                 adapter.setData(response.body());
+                refreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<List<Item>> call, Throwable t) {
-
+                refreshLayout.setRefreshing(false);
             }
         });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (ADD_ITEM_REQUEST_CODE== requestCode && resultCode == Activity.RESULT_OK){
+            Item item = data.getParcelableExtra("item");
+            Log.d(TAG, "onActivityResult: name = " + item.name + " price = " + item.price);
+            adapter.addItem(item);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
 }
+
+
+
 
 
 

@@ -1,5 +1,6 @@
 package com.example.moneytracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AddItemActivity extends AppCompatActivity {
     private static final String TAG = "AddItemActivity";
+    public static final String TYPE_KEY = "type";
+    private String type;
     private EditText name;
     private EditText price;
     private Button addButton;
@@ -29,6 +32,7 @@ public class AddItemActivity extends AppCompatActivity {
         name = findViewById(R.id.add_item_name);
         price = findViewById(R.id.add_item_price);
         addButton = findViewById(R.id.add_item_btn);
+        type = getIntent().getExtras().getString(TYPE_KEY);
         price.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -65,8 +69,13 @@ public class AddItemActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String itemName = name.getText().toString();
-                String itemPrice = price.getText().toString();
+                String nameValue = name.getText().toString();
+                String priceValue = price.getText().toString();
+                Item item = new Item(nameValue, priceValue, type);
+                Intent intent = new Intent();
+                intent.putExtra("item", item);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }

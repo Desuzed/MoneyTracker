@@ -22,6 +22,11 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
         createData();
     }*/
 
+    public void addItem (Item item){
+        data.add(item);
+        notifyItemInserted(data.size());
+    }
+
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Log.d(ItemListActivity.TAG, "onCreateViewHolder: " + parent.getChildCount());
         //Метод inflate преобразует разметку(текст) из xml файла в объект класса View и ViewGroup
@@ -55,26 +60,8 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
         public void applyData(Item item) {
             //  Log.d(ItemListActivity.TAG, "applyData: " + itemListActivity.recyclerView.getChildLayoutPosition(itemView) + " " + record.getTitle());
             title.setText(item.name);
-            String str = String.valueOf(item.price + " ₽");
+            String str = item.price + " ₽";
             price.setText(str);
         }
     }
-
-//    private void createData() {
-//        data.add(new Item("Молоко", 35));
-//        data.add(new Item("Курсы", 50));
-//        data.add(new Item("Работа", 500));
-//        data.add(new Item("Сладкое", 523));
-//        data.add(new Item("Вредная еда", 552));
-//        data.add(new Item("Еда", 2412));
-//        data.add(new Item("Хозяйство", 656));
-//        data.add(new Item("Регулярные платежи", 8543));
-//        data.add(new Item("Мобильная связь", 6321));
-//        data.add(new Item("Свадьба", 3467));
-//        data.add(new Item("Огород", 37));
-//        data.add(new Item("Сад", 999));
-//        data.add(new Item("Собака", 647));
-//        data.add(new Item("Кошка", 235));
-//        data.add(new Item("Компик", 65000));
-//    }
 }

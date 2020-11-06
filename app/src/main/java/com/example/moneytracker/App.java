@@ -49,6 +49,3 @@ public class App extends Application {
         return api;
     }
 }
-
-//http://android.loftschool.com/basic/v1/
-//http://loftschool.getsandbox.com/
