@@ -20,7 +20,7 @@ public class AddItemActivity extends AppCompatActivity {
     private EditText price;
     private Button addButton;
     private boolean hasTextPrice;
-    private boolean hasTextName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +35,9 @@ public class AddItemActivity extends AppCompatActivity {
         type = getIntent().getExtras().getString(TYPE_KEY);
         price.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
             public void afterTextChanged(Editable editable) {
                 hasTextPrice = TextUtils.isEmpty(editable);
@@ -51,15 +45,9 @@ public class AddItemActivity extends AppCompatActivity {
         });
         name.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
             public void afterTextChanged(Editable editable) {
                 addButton.setEnabled(!TextUtils.isEmpty(editable) && !hasTextPrice);
@@ -79,4 +67,15 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
     }
+
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
+//        if (item.getItemId() == android.R.id.home){
+//            Log.i(TAG, "onOptionsItemSelected: ");
+//
+//           // onBackPressed();
+//           // finish();
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 }

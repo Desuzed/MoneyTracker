@@ -11,5 +11,7 @@
     <color name="backgroundDark">#AADAC6</color>
     <color name="item_name">#FFC32C</color>
     <color name="item_price">#FFAE0D</color>
+    <color name="item_selected">#985305</color>
     <color name="item_text_color">#F6F6F6</color>
+    <color name="colorShadow">#79B67401</color>
 </resources>

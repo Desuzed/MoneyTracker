@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.moneytracker">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -11,21 +12,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyTracker">
-        <activity android:name=".AddItemActivity" android:label="@string/add_item_title">
-
-        </activity>
-        <activity android:name=".MainActivity" android:label="@string/main_screen_title">
+        <activity android:name=".AuthActivity"></activity>
+        <activity
+            android:name=".AddItemActivity"
+            android:label="@string/add_item_title"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/main_screen_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!--<activity
-            android:name=".ItemsActivity">
-
-        </activity>-->
-
     </application>
 
 </manifest>
