@@ -15,7 +15,6 @@ import java.util.List;
 class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     private List<Item> data = new ArrayList<>();
     ItemsAdapterListener listener = null;
-
     public void setListener(ItemsAdapterListener listener) {
         this.listener = listener;
     }

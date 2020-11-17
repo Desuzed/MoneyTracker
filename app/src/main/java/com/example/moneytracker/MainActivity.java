@@ -54,9 +54,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
     @Override
     public void onPageSelected(int position) {
@@ -95,10 +93,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
             fragment.onActivityResult(requestCode, resultCode, data);
         }
-
     }
-
-
 
     @Override
     public void onActionModeStarted(ActionMode mode) {
@@ -119,8 +114,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onResume() {
         super.onResume();
-
-        Intent intent = new Intent(this, AuthActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, AuthActivity.class);
+//        startActivity(intent);
     }
 }
