@@ -59,11 +59,11 @@ public class AddItemActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String nameValue = name.getText().toString();
                 String priceValue = price.getText().toString();
-                Item item = new Item(nameValue, priceValue, type);
+                Item item = new Item(ItemsAdapter.fireBaseMaxId + 1,  nameValue, priceValue, type);
                 Intent intent = new Intent();
                 intent.putExtra("item", item);
                 setResult(RESULT_OK, intent);
-                finish();
+                finish(); //Goes to ItemsFragment, onActivityResult
             }
         });
     }

@@ -24,10 +24,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import static com.example.moneytracker.R.id.list;
 
 public class ItemsFragment extends Fragment {
@@ -65,7 +61,7 @@ public class ItemsFragment extends Fragment {
         }
         //Фрагмент имеет доступ к внешней активити, т.е вызываем getActivity,а активити имеет доступ к Application
 
-        api = ((App) getActivity().getApplication()).getApi();
+      //  api = ((App) getActivity().getApplication()).getApi();
     }
 
     @Nullable
@@ -94,31 +90,33 @@ public class ItemsFragment extends Fragment {
     }
 
     private void loadItems() {
-        Call<List<Item>> call = api.getItems(type);
-        call.enqueue(new Callback<List<Item>>() {
-            @Override
-            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
-                adapter.setData(response.body());
-                refreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(Call<List<Item>> call, Throwable t) {
-                refreshLayout.setRefreshing(false);
-            }
-        });
+//        Call<List<Item>> call = api.getItems(type);
+//        call.enqueue(new Callback<List<Item>>() {
+//            @Override
+//            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
+//                adapter.setData(response.body());
+//                refreshLayout.setRefreshing(false);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Item>> call, Throwable t) {
+//                refreshLayout.setRefreshing(false);
+//            }
+//        });
+        adapter.getDataFromDB();
+        refreshLayout.setRefreshing(false);
     }
-
+    //Goes from AddItemActivity, addButton.setOnClickListener.onClick
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (ADD_ITEM_REQUEST_CODE == requestCode && resultCode == Activity.RESULT_OK) {
             Item item = data.getParcelableExtra("item");
             //эта проверка делает так, что фрагмент (Баланс или расход) проверяет чей этот Item. если его, то адаптер добавляет его
             //Попытки добавления получается две, но если добавляется расход, то срабатывает проверка и в доходы не добавляется
-            if (item.type.equals(type)) {
+            if (item.getType().equals(type)) {
                 adapter.addItem(item);
             }
-            Log.d(TAG, "onActivityResult: name = " + item.name + " price = " + item.price + " type = " + type);
+           // Log.d(TAG, "onActivityResult: name = " + item.name + " price = " + item.price + " type = " + type);
 
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -126,10 +124,12 @@ public class ItemsFragment extends Fragment {
 
     private void removeSelectedItems(){
         //TODO Неккоректное удаление нескольких элементов
-        for (int i = adapter.getSelectedItems().size()-1; i >=0 ; i--) {
-            adapter.remove(adapter.getSelectedItems().get(i));
-            actionModeField.finish();
+        List <Integer> selectedItems = adapter.getSelectedItems();
+        for (int i = selectedItems.size()-1; i >=0 ; i--) {
+            adapter.remove(selectedItems.get(i));
+
         }
+        actionModeField.finish();
     }
 
     // ======================== ACTION MODE ========================================================
@@ -140,13 +140,13 @@ public class ItemsFragment extends Fragment {
 
         @Override
         public void onItemClick(Item item, int position) {
-            Log.i(TAG, "onItemClick: name = " + item.name + " price" + item.price + " type=" + type + " position=" + position);
+        //    Log.i(TAG, "onItemClick: name = " + item.name + " price" + item.price + " type=" + type + " position=" + position);
             toggleSelection(position);
         }
 
         @Override
         public void onItemLongClick(Item item, int position) {
-            Log.i(TAG, "onItemLongClick: name = " + item.name + " price" + item.price + " type=" + type + " position=" + position);
+        //    Log.i(TAG, "onItemLongClick: name = " + item.name + " price" + item.price + " type=" + type + " position=" + position);
             if (isInActionMode()) {
                 return;
             }
