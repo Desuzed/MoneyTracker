@@ -123,7 +123,7 @@ public class ItemsFragment extends Fragment {
     }
 
     private void removeSelectedItems(){
-        //TODO Неккоректное удаление нескольких элементов
+
         List <Integer> selectedItems = adapter.getSelectedItems();
         for (int i = selectedItems.size()-1; i >=0 ; i--) {
             adapter.remove(selectedItems.get(i));

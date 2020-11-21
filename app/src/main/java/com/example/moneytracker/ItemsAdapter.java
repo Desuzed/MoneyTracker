@@ -1,6 +1,5 @@
 package com.example.moneytracker;
 
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,30 +23,27 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     public static int fireBaseMaxId = 0;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("user");
-    private List<Item> listDB = new ArrayList<>();
+    private List<Item> data = new ArrayList<>();
     ItemsAdapterListener listener = null;
     public void getDataFromDB (){
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (listDB.size() >0) listDB.clear();
+                if (data.size() >0) data.clear();
                 for (DataSnapshot ds :snapshot.getChildren()) {
-                   // Log.i(TAG, "onDataChange: keyDelete" + keyDelete);
                     Item item = ds.getValue(Item.class);
                     assert item !=null;
                     if (item.getId() > fireBaseMaxId){
                         fireBaseMaxId = item.getId();
                     }
-                    listDB.add(item);
+                    data.add(item);
                 }
                 notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         };
-
         myRef.addValueEventListener(valueEventListener);
-
        // Query query = myRef.child("user");
     }
 
@@ -56,16 +52,14 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     }
 
     public void setData(List<Item> data) {
-        this.listDB = data;
+        this.data = data;
         notifyDataSetChanged();
     }
 
     public void addItem(Item item) {
-        listDB.add(item);
-        String id = myRef.getKey();
-        Log.i(TAG, "addItem(): id from fireBase= " + id);
+        data.add(item);
         myRef.push().setValue(item);
-        notifyItemInserted(listDB.size());
+        notifyItemInserted(data.size());
     }
     //===============================  Selections ==================================================
 
@@ -98,7 +92,7 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     }
 
     Item remove(int position) {
-        final Item item = listDB.remove(position);
+        final Item item = data.remove(position);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -132,13 +126,13 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         // Log.d(ItemListActivity.TAG, "onBindViewHolder: " + itemListActivity.recyclerView.getChildCount() + " " + position);
-        Item record = listDB.get(position);
+        Item record = data.get(position);
         holder.applyData(record, position, listener, selections.get(position, false));
     }
 
     @Override
     public int getItemCount() {
-        return listDB.size();
+        return data.size();
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
