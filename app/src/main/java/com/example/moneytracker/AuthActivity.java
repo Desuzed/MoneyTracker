@@ -22,12 +22,21 @@ public class AuthActivity extends AppCompatActivity {
     private Button btnSignIn, btnSignUp, btnStart, btnLogOut;
     private EditText eMail, password;
     private TextView startTextView;
-    private FirebaseAuth mAuth;
-
+    private static FirebaseAuth mAuth;
+//    private static AuthActivity instance;
+//    public static synchronized AuthActivity getInstance(){
+//        if (instance==null){
+//            instance = new AuthActivity();
+//        }
+//        return instance;
+//    }
+//    public static String getEmail (){
+//        return mAuth.getCurrentUser().getEmail();
+//    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auth_db);
+        setContentView(R.layout.auth_layout);
         init();
         // ======= SIGN IN===============
         btnSignIn.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +111,8 @@ public class AuthActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && currentUser.isEmailVerified()) {
             showSigned();
+            Intent intent = new Intent(this, ItemsAdapter.class);
+            intent.putExtra("email", currentUser.getEmail());
             Toast.makeText(this, "User not null", Toast.LENGTH_SHORT).show();
         } else {
             showUnsigned();

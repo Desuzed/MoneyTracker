@@ -22,7 +22,7 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     private static final String TAG = "ItemsAdapter";
     public static int fireBaseMaxId = 0;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("user");
+    private DatabaseReference myRef = database.getReference("user");
     private List<Item> data = new ArrayList<>();
     ItemsAdapterListener listener = null;
     public void getDataFromDB (){
@@ -44,6 +44,7 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
             public void onCancelled(@NonNull DatabaseError error) {}
         };
         myRef.addValueEventListener(valueEventListener);
+
        // Query query = myRef.child("user");
     }
 
@@ -57,8 +58,9 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     }
 
     public void addItem(Item item) {
+        //TODO Реализовать через интент
         data.add(item);
-        myRef.push().setValue(item);
+        myRef.child("11111").push().setValue(item);
         notifyItemInserted(data.size());
     }
     //===============================  Selections ==================================================

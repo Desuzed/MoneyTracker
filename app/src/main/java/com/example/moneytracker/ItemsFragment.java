@@ -61,7 +61,7 @@ public class ItemsFragment extends Fragment {
         }
         //Фрагмент имеет доступ к внешней активити, т.е вызываем getActivity,а активити имеет доступ к Application
 
-      //  api = ((App) getActivity().getApplication()).getApi();
+        //  api = ((App) getActivity().getApplication()).getApi();
     }
 
     @Nullable
@@ -103,9 +103,17 @@ public class ItemsFragment extends Fragment {
 //                refreshLayout.setRefreshing(false);
 //            }
 //        });
-        adapter.getDataFromDB();
-        refreshLayout.setRefreshing(false);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public synchronized void run() {
+                adapter.getDataFromDB();
+                refreshLayout.setRefreshing(false);
+                Log.i(TAG, "run: " + Thread.currentThread().getName() );
+            }
+        });
+        thread.start();
     }
+
     //Goes from AddItemActivity, addButton.setOnClickListener.onClick
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -116,20 +124,21 @@ public class ItemsFragment extends Fragment {
             if (item.getType().equals(type)) {
                 adapter.addItem(item);
             }
-           // Log.d(TAG, "onActivityResult: name = " + item.name + " price = " + item.price + " type = " + type);
+            // Log.d(TAG, "onActivityResult: name = " + item.name + " price = " + item.price + " type = " + type);
 
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void removeSelectedItems(){
+    private void removeSelectedItems() {
 
-        List <Integer> selectedItems = adapter.getSelectedItems();
-        for (int i = selectedItems.size()-1; i >=0 ; i--) {
+        List<Integer> selectedItems = adapter.getSelectedItems();
+        for (int i = selectedItems.size() - 1; i >= 0; i--) {
             adapter.remove(selectedItems.get(i));
 
         }
         actionModeField.finish();
+
     }
 
     // ======================== ACTION MODE ========================================================
@@ -140,13 +149,13 @@ public class ItemsFragment extends Fragment {
 
         @Override
         public void onItemClick(Item item, int position) {
-        //    Log.i(TAG, "onItemClick: name = " + item.name + " price" + item.price + " type=" + type + " position=" + position);
+            //    Log.i(TAG, "onItemClick: name = " + item.name + " price" + item.price + " type=" + type + " position=" + position);
             toggleSelection(position);
         }
 
         @Override
         public void onItemLongClick(Item item, int position) {
-        //    Log.i(TAG, "onItemLongClick: name = " + item.name + " price" + item.price + " type=" + type + " position=" + position);
+            //    Log.i(TAG, "onItemLongClick: name = " + item.name + " price" + item.price + " type=" + type + " position=" + position);
             if (isInActionMode()) {
                 return;
             }
@@ -181,7 +190,7 @@ public class ItemsFragment extends Fragment {
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.remove:
-                  //  removeSelectedItems();
+                    //  removeSelectedItems();
                     showDialog();
                     break;
             }
@@ -195,7 +204,7 @@ public class ItemsFragment extends Fragment {
         }
     };
 
-    private void showDialog (){
+    private void showDialog() {
         AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setMessage("Вы уверены?")
                 .setTitle("Удаление элемента")
