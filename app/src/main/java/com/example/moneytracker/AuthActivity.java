@@ -19,20 +19,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class AuthActivity extends AppCompatActivity {
+    private static final String TAG = "AuthActivity";
     private Button btnSignIn, btnSignUp, btnStart, btnLogOut;
     private EditText eMail, password;
     private TextView startTextView;
+    public static String UID;
     private static FirebaseAuth mAuth;
-//    private static AuthActivity instance;
-//    public static synchronized AuthActivity getInstance(){
-//        if (instance==null){
-//            instance = new AuthActivity();
-//        }
-//        return instance;
-//    }
-//    public static String getEmail (){
-//        return mAuth.getCurrentUser().getEmail();
-//    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,11 +78,12 @@ public class AuthActivity extends AppCompatActivity {
             }
         });
         // =========== START BUTTON ===============
+        //TODO Сделать так, чтобы не приходилось нажимать на кнопку старта, а приложение сразу открывалось с  главной активити
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(AuthActivity.this, MainActivity.class);
-                startActivity(i);
+                Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
         // =========== LOG OUT BUTTON ===============
@@ -111,15 +104,13 @@ public class AuthActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && currentUser.isEmailVerified()) {
             showSigned();
-            Intent intent = new Intent(this, ItemsAdapter.class);
-            intent.putExtra("email", currentUser.getEmail());
-            Toast.makeText(this, "User not null", Toast.LENGTH_SHORT).show();
         } else {
             showUnsigned();
-            Toast.makeText(this, "User null", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "USER NULL", Toast.LENGTH_SHORT).show();
         }
     }
-
+//7VlcQDZt4QM6oTXXLvegKrdyw7H3
+//EyMLhhnw9age2Ib8Pe9tuKmASgQ2
     private void sendEmailVerification() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert currentUser != null;
@@ -140,11 +131,11 @@ public class AuthActivity extends AppCompatActivity {
         assert user != null;
         if (user.isEmailVerified()) {
             startTextView.setText("Вы вошли как: " + user.getEmail());
+            UID = user.getUid();
             btnSignIn.setVisibility(View.GONE);
             btnSignUp.setVisibility(View.GONE);
             eMail.setVisibility(View.GONE);
             password.setVisibility(View.GONE);
-
             btnStart.setVisibility(View.VISIBLE);
             btnLogOut.setVisibility(View.VISIBLE);
 
@@ -159,7 +150,6 @@ public class AuthActivity extends AppCompatActivity {
         btnSignUp.setVisibility(View.VISIBLE);
         eMail.setVisibility(View.VISIBLE);
         password.setVisibility(View.VISIBLE);
-
         btnStart.setVisibility(View.GONE);
         btnLogOut.setVisibility(View.GONE);
     }

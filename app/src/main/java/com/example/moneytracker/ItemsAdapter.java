@@ -27,6 +27,8 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     ItemsAdapterListener listener = null;
     public void getDataFromDB (){
         ValueEventListener valueEventListener = new ValueEventListener() {
+            //TODO Добавление через цикл с большим количеством данных будет работать медленно, надо добавлять полным списком, попробовать реализовать
+            //к тому же этот метод довольно часто вызывается
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (data.size() >0) data.clear();
@@ -43,9 +45,7 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         };
-        myRef.addValueEventListener(valueEventListener);
-
-       // Query query = myRef.child("user");
+        myRef.child(AuthActivity.UID).addValueEventListener(valueEventListener);
     }
 
     public void setListener(ItemsAdapterListener listener) {
@@ -58,9 +58,8 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     }
 
     public void addItem(Item item) {
-        //TODO Реализовать через интент
         data.add(item);
-        myRef.child("11111").push().setValue(item);
+        myRef.child(AuthActivity.UID).push().setValue(item);
         notifyItemInserted(data.size());
     }
     //===============================  Selections ==================================================
@@ -95,14 +94,14 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
     Item remove(int position) {
         final Item item = data.remove(position);
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child(AuthActivity.UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds:snapshot.getChildren()) {
                     String keyDelete = ds.getKey();
                     Item itemDB = ds.getValue(Item.class);
                     if (item.getId()==itemDB.getId()){
-                        myRef.child(keyDelete).removeValue();
+                        myRef.child(AuthActivity.UID).child(keyDelete).removeValue();
                         break;
                     }
                 }

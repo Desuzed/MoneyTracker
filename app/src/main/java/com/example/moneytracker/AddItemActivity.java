@@ -20,8 +20,6 @@ public class AddItemActivity extends AppCompatActivity {
     private EditText price;
     private Button addButton;
     private boolean hasTextPrice;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +65,7 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
     }
-
+//TODO Стрелка назад не работает
 //    @Override
 //    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
 //        if (item.getItemId() == android.R.id.home){

@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         pager.setAdapter(adapter);
         pager.addOnPageChangeListener(this);
         tabLayout.setupWithViewPager(pager);
+
     }
 
     @Override
@@ -70,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.log_out) {
             Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-            startActivity(intent);
             FirebaseAuth.getInstance().signOut();
+            startActivity(intent);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -141,7 +142,5 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onResume() {
         super.onResume();
-//        Intent intent = new Intent(this, AuthActivity.class);
-//        startActivity(intent);
     }
 }

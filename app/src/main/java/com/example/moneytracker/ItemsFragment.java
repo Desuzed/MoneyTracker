@@ -103,6 +103,7 @@ public class ItemsFragment extends Fragment {
 //                refreshLayout.setRefreshing(false);
 //            }
 //        });
+        //TODO Скорее всего использование обычных потоков не очень корректно, поисктаь инфу по потокам на андроид и реализовать
         Thread thread = new Thread(new Runnable() {
             @Override
             public synchronized void run() {

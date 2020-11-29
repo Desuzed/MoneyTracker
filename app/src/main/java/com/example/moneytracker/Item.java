@@ -8,13 +8,10 @@ public class Item implements Parcelable {
     private String name;
     private String price;
     private String type;
-
     public static final String TYPE_UNKNOWN = "unknown";
     public static final String TYPE_INCOMES = "incomes";
     public static final String TYPE_EXPENSES = "expenses";
     public static final String TYPE_BALANCE = "balance";
-
-
     public Item() {
     }
 
@@ -60,7 +57,7 @@ public class Item implements Parcelable {
     public int getId() {
         return id;
     }
-
+//TODO Попробовать реализовать не локальный ID, а работать через UID из базы
     public void setId(int id) {
         this.id = id;
     }
