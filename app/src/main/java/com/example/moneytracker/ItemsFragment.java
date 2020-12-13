@@ -34,7 +34,7 @@ public class ItemsFragment extends Fragment {
     private final static int DATA_LOADED = 100;
     public static final int ADD_ITEM_REQUEST_CODE = 123;
     private String type;
-    private Api api;
+   // private Api api;
     private SwipeRefreshLayout refreshLayout;
     public static ItemsFragment createItemsFragment(String type) {
         ItemsFragment fragment = new ItemsFragment();
@@ -47,11 +47,11 @@ public class ItemsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new ItemsAdapter();
        // Toast.makeText(getContext(), "adapter created", Toast.LENGTH_SHORT).show();
-        adapter.setListener(new AdapterListener());
         Bundle bundle = getArguments();
         type = bundle.getString(TYPE_KEY, Item.TYPE_UNKNOWN);
+        adapter = new ItemsAdapter(type);
+        adapter.setListener(new AdapterListener());
         if (type.equals(Item.TYPE_UNKNOWN)) {
             throw new IllegalArgumentException("Unknown type");
         }
@@ -103,7 +103,7 @@ public class ItemsFragment extends Fragment {
         Thread thread = new Thread(new Runnable() {
             @Override
             public synchronized void run() {
-                adapter.getDataFromDB(type);
+                adapter.getDataFromDB();
                 refreshLayout.setRefreshing(false);
                 Log.i(TAG, "run: " + Thread.currentThread().getName() );
             }
@@ -119,9 +119,8 @@ public class ItemsFragment extends Fragment {
             //эта проверка делает так, что фрагмент (Баланс или расход) проверяет чей этот Item. если его, то адаптер добавляет его
             //Попытки добавления получается две, но если добавляется расход, то срабатывает проверка и в доходы не добавляется
             if (item.getType().equals(type)){
-                adapter.addItem(item, type);
+                adapter.addItem(item);
             }
-
             // Log.d(TAG, "onActivityResult: name = " + item.name + " price = " + item.price + " type = " + type);
 
         }
@@ -131,7 +130,7 @@ public class ItemsFragment extends Fragment {
     private void removeSelectedItems() {
         List<Integer> selectedItems = adapter.getSelectedItems();
         for (int i = selectedItems.size() - 1; i >= 0; i--) {
-            adapter.remove(selectedItems.get(i), type);
+            adapter.remove(selectedItems.get(i));
 
         }
         actionModeField.finish();
