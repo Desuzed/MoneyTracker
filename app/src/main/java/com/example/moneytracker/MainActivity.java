@@ -7,6 +7,7 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     private static final String TAG = "MainActivity";
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private FloatingActionButton fab;
     private ActionMode actionMode = null;
     private Toolbar toolbar;
+    private  FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +56,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         });
         pager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tabLayout);
-        MainPagesAdapter adapter = new MainPagesAdapter(getSupportFragmentManager(), this);
-        pager.setAdapter(adapter);
         pager.addOnPageChangeListener(this);
         tabLayout.setupWithViewPager(pager);
-
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -142,5 +143,21 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onResume() {
         super.onResume();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null){
+            MainPagesAdapter adapter = new MainPagesAdapter(getSupportFragmentManager(), this);
+            pager.setAdapter(adapter);
+            Toast.makeText(this, "SUCCESS, " + currentUser.getUid(), Toast.LENGTH_SHORT).show();
+        }else{
+            Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+            startActivity(intent);
+            Toast.makeText(this, "USER NULL", Toast.LENGTH_SHORT).show();
+        }
     }
 }

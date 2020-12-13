@@ -36,11 +36,6 @@ public class ItemsFragment extends Fragment {
     private String type;
     private Api api;
     private SwipeRefreshLayout refreshLayout;
-
-    //    private static final int TYPE_UNKNOWN = -1;
-//    public static final int TYPE_INCOMES = 0;
-//    public static final int TYPE_EXPENSES = 1;
-//    public static final int TYPE_BALANCE = 2;
     public static ItemsFragment createItemsFragment(String type) {
         ItemsFragment fragment = new ItemsFragment();
         Bundle bundle = new Bundle();
@@ -53,6 +48,7 @@ public class ItemsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new ItemsAdapter();
+       // Toast.makeText(getContext(), "adapter created", Toast.LENGTH_SHORT).show();
         adapter.setListener(new AdapterListener());
         Bundle bundle = getArguments();
         type = bundle.getString(TYPE_KEY, Item.TYPE_UNKNOWN);
@@ -107,7 +103,7 @@ public class ItemsFragment extends Fragment {
         Thread thread = new Thread(new Runnable() {
             @Override
             public synchronized void run() {
-                adapter.getDataFromDB();
+                adapter.getDataFromDB(type);
                 refreshLayout.setRefreshing(false);
                 Log.i(TAG, "run: " + Thread.currentThread().getName() );
             }
@@ -122,9 +118,10 @@ public class ItemsFragment extends Fragment {
             Item item = data.getParcelableExtra("item");
             //эта проверка делает так, что фрагмент (Баланс или расход) проверяет чей этот Item. если его, то адаптер добавляет его
             //Попытки добавления получается две, но если добавляется расход, то срабатывает проверка и в доходы не добавляется
-            if (item.getType().equals(type)) {
-                adapter.addItem(item);
+            if (item.getType().equals(type)){
+                adapter.addItem(item, type);
             }
+
             // Log.d(TAG, "onActivityResult: name = " + item.name + " price = " + item.price + " type = " + type);
 
         }
@@ -132,10 +129,9 @@ public class ItemsFragment extends Fragment {
     }
 
     private void removeSelectedItems() {
-
         List<Integer> selectedItems = adapter.getSelectedItems();
         for (int i = selectedItems.size() - 1; i >= 0; i--) {
-            adapter.remove(selectedItems.get(i));
+            adapter.remove(selectedItems.get(i), type);
 
         }
         actionModeField.finish();

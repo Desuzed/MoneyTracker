@@ -1,5 +1,6 @@
 package com.example.moneytracker;
 
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,8 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,15 +24,16 @@ import java.util.List;
 
 class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     private static final String TAG = "ItemsAdapter";
-    public static int fireBaseMaxId = 0;
+    public static int fireBaseMaxId = 0;        //TODO Максимальный ID ищет по всей базе, а не по конкретному пользователю
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference("user");
+    private DatabaseReference userRef = myRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
     private List<Item> data = new ArrayList<>();
+    private User user;
     ItemsAdapterListener listener = null;
-    public void getDataFromDB (){
+    public void getDataFromDB (String type){
         ValueEventListener valueEventListener = new ValueEventListener() {
-            //TODO Добавление через цикл с большим количеством данных будет работать медленно, надо добавлять полным списком, попробовать реализовать
-            //к тому же этот метод довольно часто вызывается
+            //TODO Сделать разделение на доходы и расходы в базе для каждого пользователя
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (data.size() >0) data.clear();
@@ -45,21 +50,52 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         };
-        myRef.child(AuthActivity.UID).addValueEventListener(valueEventListener);
+        userRef.child(type).addValueEventListener(valueEventListener);
     }
+
+
 
     public void setListener(ItemsAdapterListener listener) {
         this.listener = listener;
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.i(TAG, "onChildAdded: " + snapshot.toString() + ",  previousChildName" + previousChildName );
+                
+               // userRef.updateChildren();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.i(TAG, "onChildChanged: " + snapshot.toString() + ",  previousChildName" + previousChildName);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                Log.i(TAG, "onChildRemoved: "+ snapshot.toString() );
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        userRef.addChildEventListener(childEventListener);
     }
 
-    public void setData(List<Item> data) {
-        this.data = data;
-        notifyDataSetChanged();
-    }
+//    public void setData(List<Item> data) {
+//        this.data = data;
+//        notifyDataSetChanged();
+//    }
 
-    public void addItem(Item item) {
+    public void addItem(Item item, String type) {
         data.add(item);
-        myRef.child(AuthActivity.UID).push().setValue(item);
+        userRef.child(type).push().setValue(item);
         notifyItemInserted(data.size());
     }
     //===============================  Selections ==================================================
@@ -92,16 +128,17 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
         return items;
     }
 
-    Item remove(int position) {
+    Item remove(int position, String type) {
         final Item item = data.remove(position);
-        myRef.child(AuthActivity.UID).addListenerForSingleValueEvent(new ValueEventListener() {
+        userRef.child(type).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds:snapshot.getChildren()) {
                     String keyDelete = ds.getKey();
+                   // String id = ds.get
                     Item itemDB = ds.getValue(Item.class);
                     if (item.getId()==itemDB.getId()){
-                        myRef.child(AuthActivity.UID).child(keyDelete).removeValue();
+                        userRef.child(type).child(keyDelete).removeValue();
                         break;
                     }
                 }
