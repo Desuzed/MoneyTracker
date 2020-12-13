@@ -58,7 +58,7 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
         this.type = type;
         typeRef = userRef.child(type);
     }
-
+//test
     public void setListener(ItemsAdapterListener listener) {
         this.listener = listener;
 //        ChildEventListener childEventListener = new ChildEventListener() {
