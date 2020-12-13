@@ -5,14 +5,14 @@
     <string name="hint_add_item">Название</string>
     <string name="rub">0₽</string>
     <string name="main_screen_title">Учёт бюджета</string>
-    <string name="tab_outcome">Расход</string>
+    <string name="tab_expenses">Расход</string>
     <string name="tab_income">Доход</string>
     <string name="tab_balance">Баланс</string>
 
     <string-array name="tab_titles">
-        <item >@string/tab_outcome</item>
-        <item >@string/tab_income</item>
-        <item >@string/tab_balance</item>
+        <item>@string/tab_expenses</item>
+        <item>@string/tab_income</item>
+        <item>@string/tab_balance</item>
     </string-array>
 
 </resources>

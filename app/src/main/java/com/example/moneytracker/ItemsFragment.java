@@ -1,11 +1,17 @@
 package com.example.moneytracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,13 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.example.moneytracker.R.id.list;
 
@@ -30,17 +30,12 @@ public class ItemsFragment extends Fragment {
     private RecyclerView recyclerView;
     private static final String TAG = "ItemsFragment";
     private ItemsAdapter adapter;
-    private FloatingActionButton fab;
     private static final String TYPE_KEY = "type";
     private final static int DATA_LOADED = 100;
-    private static final int ADD_ITEM_REQUEST_CODE = 123;
+    public static final int ADD_ITEM_REQUEST_CODE = 123;
     private String type;
-    private Api api;
+   // private Api api;
     private SwipeRefreshLayout refreshLayout;
-    //    private static final int TYPE_UNKNOWN = -1;
-//    public static final int TYPE_INCOMES = 0;
-//    public static final int TYPE_EXPENSES = 1;
-//    public static final int TYPE_BALANCE = 2;
     public static ItemsFragment createItemsFragment(String type) {
         ItemsFragment fragment = new ItemsFragment();
         Bundle bundle = new Bundle();
@@ -52,15 +47,17 @@ public class ItemsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new ItemsAdapter();
+       // Toast.makeText(getContext(), "adapter created", Toast.LENGTH_SHORT).show();
         Bundle bundle = getArguments();
         type = bundle.getString(TYPE_KEY, Item.TYPE_UNKNOWN);
+        adapter = new ItemsAdapter(type);
+        adapter.setListener(new AdapterListener());
         if (type.equals(Item.TYPE_UNKNOWN)) {
             throw new IllegalArgumentException("Unknown type");
         }
         //Фрагмент имеет доступ к внешней активити, т.е вызываем getActivity,а активити имеет доступ к Application
 
-        api = ((App) getActivity().getApplication()).getApi();
+        //  api = ((App) getActivity().getApplication()).getApi();
     }
 
     @Nullable
@@ -75,16 +72,6 @@ public class ItemsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onViewCreated: create");
         recyclerView = view.findViewById(list);
-        fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: button pressed" );
-                Intent intent = new Intent(getContext(), AddItemActivity.class);
-                intent.putExtra(AddItemActivity.TYPE_KEY, type);
-                startActivityForResult(intent, ADD_ITEM_REQUEST_CODE);
-            }
-        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         refreshLayout = view.findViewById(R.id.refreshSwipe);
@@ -97,40 +84,145 @@ public class ItemsFragment extends Fragment {
         });
         loadItems();
     }
-    private void loadItems (){
-        Call<List<Item>> call = api.getItems(type);
-        call.enqueue(new Callback<List<Item>>() {
-            @Override
-            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
-                adapter.setData(response.body());
-                refreshLayout.setRefreshing(false);
-            }
 
+    private void loadItems() {
+//        Call<List<Item>> call = api.getItems(type);
+//        call.enqueue(new Callback<List<Item>>() {
+//            @Override
+//            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
+//                adapter.setData(response.body());
+//                refreshLayout.setRefreshing(false);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Item>> call, Throwable t) {
+//                refreshLayout.setRefreshing(false);
+//            }
+//        });
+        //TODO Скорее всего использование обычных потоков не очень корректно, поисктаь инфу по потокам на андроид и реализовать
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public void onFailure(Call<List<Item>> call, Throwable t) {
+            public synchronized void run() {
+                adapter.getDataFromDB();
                 refreshLayout.setRefreshing(false);
+                Log.i(TAG, "run: " + Thread.currentThread().getName() );
             }
         });
+        thread.start();
     }
 
+    //Goes from AddItemActivity, addButton.setOnClickListener.onClick
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (ADD_ITEM_REQUEST_CODE== requestCode && resultCode == Activity.RESULT_OK){
+        if (ADD_ITEM_REQUEST_CODE == requestCode && resultCode == Activity.RESULT_OK) {
             Item item = data.getParcelableExtra("item");
-            Log.d(TAG, "onActivityResult: name = " + item.name + " price = " + item.price);
-            adapter.addItem(item);
+            //эта проверка делает так, что фрагмент (Баланс или расход) проверяет чей этот Item. если его, то адаптер добавляет его
+            //Попытки добавления получается две, но если добавляется расход, то срабатывает проверка и в доходы не добавляется
+            if (item.getType().equals(type)){
+                adapter.addItem(item);
+            }
+            // Log.d(TAG, "onActivityResult: name = " + item.name + " price = " + item.price + " type = " + type);
+
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
 
+    private void removeSelectedItems() {
+        List<Integer> selectedItems = adapter.getSelectedItems();
+        for (int i = selectedItems.size() - 1; i >= 0; i--) {
+            adapter.remove(selectedItems.get(i));
+
+        }
+        actionModeField.finish();
+
+    }
+
+    // ======================== ACTION MODE ========================================================
+
+    private ActionMode actionModeField = null;
+
+    private class AdapterListener implements ItemsAdapterListener {
+
+        @Override
+        public void onItemClick(Item item, int position) {
+            //    Log.i(TAG, "onItemClick: name = " + item.name + " price" + item.price + " type=" + type + " position=" + position);
+            toggleSelection(position);
+        }
+
+        @Override
+        public void onItemLongClick(Item item, int position) {
+            //    Log.i(TAG, "onItemLongClick: name = " + item.name + " price" + item.price + " type=" + type + " position=" + position);
+            if (isInActionMode()) {
+                return;
+            }
+            actionModeField = getActivity().startActionMode(actionModeCallBack);
+            toggleSelection(position);
+        }
+
+        private boolean isInActionMode() {
+            return actionModeField != null;
+        }
+
+        private void toggleSelection(int position) {
+            adapter.toggleSelection(position);
+        }
+    }
+
+    private ActionMode.Callback actionModeCallBack = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            actionModeField = actionMode;
+            MenuInflater menuInflater = new MenuInflater(getContext());
+            menuInflater.inflate(R.menu.items_menu, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.remove:
+                    //  removeSelectedItems();
+                    showDialog();
+                    break;
+            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+            adapter.clearSelections();
+            actionModeField = null;
+        }
+    };
+
+    private void showDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setMessage("Вы уверены?")
+                .setTitle("Удаление элемента")
+                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        removeSelectedItems();
+                    }
+                })
+                .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .create();
+        dialog.show();
     }
 }
 
 
-
-
-
-
-        //С применением AcyncTask. Его использование нежелательно т.к возможны утечки памяти в связи с
+//С применением AcyncTask. Его использование нежелательно т.к возможны утечки памяти в связи с
 // тем, что создавая его как анонимный класс, он имеет ссылку на активити. Дальше он отрабатывает в отдельном потоке
 // и если активити сворачивается или закрывается, то происходят утечки памяти
 //    private void loadItems (){
@@ -165,7 +257,7 @@ public class ItemsFragment extends Fragment {
 //        };
 //        acyncTask.execute();
 //    }
-        //Thread and handler
+//Thread and handler
 //    public void loadItems (){
 //        Log.d(TAG, "loadItems: current thread " + Thread.currentThread().getName());
 ////Сохдаем новый поток т.к нельзя из главного потока обращаться в интернет или к памяти устройства, потому что
