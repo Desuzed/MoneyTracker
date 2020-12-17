@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardview_shadow_start_color">
+
+    <TextView
+        android:id="@+id/totalTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/balance_total"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:text="14500 P"></TextView>
+
+    <TextView
+        android:id="@+id/total_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tab_balance"
+        android:textColor="@color/balance_secondary_text"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/totalTV"
+        app:layout_constraintStart_toStartOf="@+id/totalTV"
+        app:layout_constraintTop_toBottomOf="@+id/totalTV"
+        tools:ignore="MissingConstraints"></TextView>
+
+    <TextView
+        android:id="@+id/expenseTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/balance_expense"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toStartOf="@+id/incomeTV"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalTV"
+        tools:ignore="MissingConstraints"
+        tools:text="4500 P"></TextView>
+
+    <TextView
+        android:id="@+id/total_expense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/tab_expenses"
+        android:textColor="@color/balance_secondary_text"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/expenseTV"
+        app:layout_constraintHorizontal_bias="0.536"
+        app:layout_constraintStart_toStartOf="@+id/expenseTV"
+        app:layout_constraintTop_toBottomOf="@+id/expenseTV"
+        tools:ignore="MissingConstraints"></TextView>
+
+    <TextView
+        android:id="@+id/incomeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="64dp"
+        android:textColor="@color/balance_income"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.996"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/total_title"
+        tools:ignore="MissingConstraints"
+        tools:text="19000 P"></TextView>
+
+    <TextView
+        android:id="@+id/total_income"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/tab_income"
+        android:textColor="@color/balance_secondary_text"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/incomeTV"
+        app:layout_constraintHorizontal_bias="0.44"
+        app:layout_constraintStart_toStartOf="@+id/incomeTV"
+        app:layout_constraintTop_toBottomOf="@+id/incomeTV"
+        tools:ignore="MissingConstraints"></TextView>
+
+    <com.example.moneytracker.DiagramView
+        android:id="@+id/diagramView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="68dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/total_income"
+        tools:ignore="MissingConstraints"></com.example.moneytracker.DiagramView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

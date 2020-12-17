@@ -34,8 +34,10 @@ public class ItemsFragment extends Fragment {
     private final static int DATA_LOADED = 100;
     public static final int ADD_ITEM_REQUEST_CODE = 123;
     private String type;
-   // private Api api;
+    private Thread thread;
+    // private Api api;
     private SwipeRefreshLayout refreshLayout;
+
     public static ItemsFragment createItemsFragment(String type) {
         ItemsFragment fragment = new ItemsFragment();
         Bundle bundle = new Bundle();
@@ -47,7 +49,7 @@ public class ItemsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // Toast.makeText(getContext(), "adapter created", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getContext(), "adapter created", Toast.LENGTH_SHORT).show();
         Bundle bundle = getArguments();
         type = bundle.getString(TYPE_KEY, Item.TYPE_UNKNOWN);
         adapter = new ItemsAdapter(type);
@@ -100,15 +102,23 @@ public class ItemsFragment extends Fragment {
 //            }
 //        });
         //TODO Скорее всего использование обычных потоков не очень корректно, поисктаь инфу по потокам на андроид и реализовать
-        Thread thread = new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public synchronized void run() {
                 adapter.getDataFromDB();
                 refreshLayout.setRefreshing(false);
-                Log.i(TAG, "run: " + Thread.currentThread().getName() );
+                Log.i(TAG, "run: " + Thread.currentThread().getName());
             }
         });
         thread.start();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (!(thread.isInterrupted())) {
+            thread.interrupt();
+        }
     }
 
     //Goes from AddItemActivity, addButton.setOnClickListener.onClick
@@ -118,7 +128,7 @@ public class ItemsFragment extends Fragment {
             Item item = data.getParcelableExtra("item");
             //эта проверка делает так, что фрагмент (Баланс или расход) проверяет чей этот Item. если его, то адаптер добавляет его
             //Попытки добавления получается две, но если добавляется расход, то срабатывает проверка и в доходы не добавляется
-            if (item.getType().equals(type)){
+            if (item.getType().equals(type)) {
                 adapter.addItem(item);
             }
             // Log.d(TAG, "onActivityResult: name = " + item.name + " price = " + item.price + " type = " + type);

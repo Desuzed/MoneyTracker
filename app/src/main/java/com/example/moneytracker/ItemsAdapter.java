@@ -21,7 +21,7 @@ import java.util.List;
 
 class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     private static final String TAG = "ItemsAdapter";
-    public static int fireBaseMaxId = 0;        //TODO Максимальный ID ищет по всей базе, а не по конкретному пользователю
+    public static int fireBaseMaxId = 0;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference("user");
     private DatabaseReference userRef = myRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -32,7 +32,6 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
     public void getDataFromDB() {
         ValueEventListener valueEventListener = new ValueEventListener() {
-            //TODO Сделать разделение на доходы и расходы в базе для каждого пользователя
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (data.size() > 0) data.clear();
@@ -63,14 +62,13 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
         this.listener = listener;
 //        ChildEventListener childEventListener = new ChildEventListener() {
 //            @Override
-//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//            public void onChildAdded(@NonNull DataSnapshot snapshot,  String previousChildName) {
 //                Log.i(TAG, "onChildAdded: " + snapshot.toString() + ",  previousChildName" + previousChildName );
 //
-//               // userRef.updateChildren();
 //            }
 //
 //            @Override
-//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//            public void onChildChanged(@NonNull DataSnapshot snapshot, String previousChildName) {
 //                Log.i(TAG, "onChildChanged: " + snapshot.toString() + ",  previousChildName" + previousChildName);
 //            }
 //
@@ -80,7 +78,7 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 //            }
 //
 //            @Override
-//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//            public void onChildMoved(@NonNull DataSnapshot snapshot, String previousChildName) {
 //
 //            }
 //
@@ -89,7 +87,7 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 //
 //            }
 //        };
-//        userRef.addChildEventListener(childEventListener);
+//        typeRef.addChildEventListener(childEventListener);
     }
 
 //    public void setData(List<Item> data) {
@@ -159,8 +157,13 @@ class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Log.d(ItemListActivity.TAG, "onCreateViewHolder: " + parent.getChildCount());
         //Метод inflate преобразует разметку(текст) из xml файла в объект класса View и ViewGroup
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
-        return new ItemViewHolder(view);
+        if (type.equals(Item.TYPE_EXPENSES)){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expense, parent, false);
+            return new ItemViewHolder(view);
+        }else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_income, parent, false);
+            return new ItemViewHolder(view);
+        }
     }
 
     @Override

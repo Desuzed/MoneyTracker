@@ -1,7 +1,6 @@
 package com.example.moneytracker;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,8 +23,6 @@ public class MainPagesAdapter extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        Log.i(TAG, "getItem position: " + position);
-
         switch (position){
             case PAGE_INCOMES:
                 return ItemsFragment.createItemsFragment(Item.TYPE_INCOMES);
