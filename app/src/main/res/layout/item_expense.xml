@@ -21,17 +21,18 @@
         android:layout_weight="1"
         android:padding="16dp"
         android:text="TextView"
-        android:textColor="@color/white"
-        android:background="@color/colorShadow"/>
+        android:textColor="@color/black"
+        />
 
     <TextView
         android:id="@+id/item_price"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:text="TextView"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:padding="16dp"
         android:gravity="right"
         tools:text="122"
+        android:background="@color/colorShadow"
        />
 </LinearLayout>

@@ -44,8 +44,8 @@ public class AuthActivity extends AppCompatActivity {
                                         Intent intent = new Intent(AuthActivity.this, MainActivity.class);
                                         startActivity(intent);
                                     } else {
-                                        showUnsigned();
-                                        Toast.makeText(AuthActivity.this, "Проверьте логин и пароль",
+                                       // showUnsigned();
+                                        Toast.makeText(AuthActivity.this, "Проверьте логин и пароль, а также подключение к сети",
                                                 Toast.LENGTH_SHORT).show();
    //TODO При отсутствии интернета также выдаёт этот тост. Требуется обрабатывать все случаи, когда не удается войти
                                     }
@@ -62,13 +62,13 @@ public class AuthActivity extends AppCompatActivity {
                     mAuth.createUserWithEmailAndPassword(eMail.getText().toString(), password.getText().toString())
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
-                                    showSigned();
+                                 //   showSigned();
                                     sendEmailVerification();
                                     Toast.makeText(AuthActivity.this, "Верификация отправлена. Проверьте почту",
                                             Toast.LENGTH_SHORT).show();
                                 } else {
-                                    showUnsigned();
-                                    Toast.makeText(AuthActivity.this, "Ошибка. Проверьте почту снова.",
+                                 //   showUnsigned();
+                                    Toast.makeText(AuthActivity.this, "Ошибка. Проверьте правильность почты и пароля",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -95,20 +95,18 @@ public class AuthActivity extends AppCompatActivity {
 //        });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null && currentUser.isEmailVerified()) {
-            showSigned();
-        } else {
-            showUnsigned();
-            //  Toast.makeText(this, "USER NULL", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    //7VlcQDZt4QM6oTXXLvegKrdyw7H3
-//EyMLhhnw9age2Ib8Pe9tuKmASgQ2
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if (currentUser != null && currentUser.isEmailVerified()) {
+//            showSigned();
+//        } else {
+//            showUnsigned();
+//            //  Toast.makeText(this, "USER NULL", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+//
     private void sendEmailVerification() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert currentUser != null;
@@ -118,7 +116,7 @@ public class AuthActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(AuthActivity.this, "Проверьте свой e-mail", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(AuthActivity.this, "E-mail verification error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AuthActivity.this, "Ошибка. Проверьте почту заново, также папку спама", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -128,34 +126,34 @@ public class AuthActivity extends AppCompatActivity {
 //        return mAuth.getCurrentUser() != null? true: false;
 //    }
 
-    private void showSigned() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        assert user != null;
-        if (user.isEmailVerified()) {
-            startTextView.setText("Вы вошли как: " + user.getEmail());
-         //   UID = user.getUid();
-            btnSignIn.setVisibility(View.GONE);
-            btnSignUp.setVisibility(View.GONE);
-            eMail.setVisibility(View.GONE);
-            password.setVisibility(View.GONE);
-            btnStart.setVisibility(View.VISIBLE);
-            btnLogOut.setVisibility(View.VISIBLE);
+//    private void showSigned() {
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        assert user != null;
+//        if (user.isEmailVerified()) {
+//            startTextView.setText("Вы вошли как: " + user.getEmail());
+//         //   UID = user.getUid();
+//            btnSignIn.setVisibility(View.GONE);
+//            btnSignUp.setVisibility(View.GONE);
+//            eMail.setVisibility(View.GONE);
+//            password.setVisibility(View.GONE);
+//            btnStart.setVisibility(View.VISIBLE);
+//            btnLogOut.setVisibility(View.VISIBLE);
+//
+//        } else {
+//            Toast.makeText(AuthActivity.this, "Проверьте почту", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-        } else {
-            Toast.makeText(AuthActivity.this, "Проверьте почту", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void showUnsigned() {
-        startTextView.setText("UNSIGNED");
-        btnSignIn.setVisibility(View.VISIBLE);
-        btnSignUp.setVisibility(View.VISIBLE);
-        eMail.setVisibility(View.VISIBLE);
-        password.setVisibility(View.VISIBLE);
-//        btnStart.setVisibility(View.GONE);
-//        btnLogOut.setVisibility(View.GONE);
-        ItemsAdapter.fireBaseMaxId = 0;
-    }
+//    private void showUnsigned() {
+//        startTextView.setText("UNSIGNED");
+//        btnSignIn.setVisibility(View.VISIBLE);
+//        btnSignUp.setVisibility(View.VISIBLE);
+//        eMail.setVisibility(View.VISIBLE);
+//        password.setVisibility(View.VISIBLE);
+////        btnStart.setVisibility(View.GONE);
+////        btnLogOut.setVisibility(View.GONE);
+//        ItemsAdapter.fireBaseMaxId = 0;
+//    }
 
     private void init() {
         btnSignIn = findViewById(R.id.signInButton);

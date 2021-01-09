@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="accent">#fdd835</color>
+    <color name="main_color">#009688</color>
+    <color name="secondary_color">#80CBC4</color>
+    <color name="item_selected">#fdd835</color>
+    <color name="expense_color">#CDDC39</color>
+    <color name="income_color">#8CC564</color>
+    <color name="colorShadow">#59888888</color>
+    <color name="colorShadow2">#59E1E1E1</color>
+    <color name="balance_secondary_text">#95989a</color>
+    <color name="backgroundDark">#00675b</color>
+
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,16 +19,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="background">#B9E8D5</color>
-    <color name="backgroundDark">#AADAC6</color>
-    <color name="item_name">#FFC32C</color>
-    <color name="item_price">#FFAE0D</color>
-    <color name="item_selected">#985305</color>
-    <color name="item_text_color">#F6F6F6</color>
-    <color name="colorShadow">#79B67401</color>
-    <color name="balance_total">#3ab7ae</color>
-    <color name="balance_expense">#f76c41</color>
-    <color name="balance_income">#fcc31e</color>
-    <color name="balance_secondary_text">#95989a</color>
-
+<!--#85CB80-->
+<!--#9CC87C-->
 </resources>

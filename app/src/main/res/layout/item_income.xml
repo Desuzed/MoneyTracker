@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    android:background="@drawable/item_bg"
+    android:background="@drawable/item_bg_income"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginTop="5dp"
@@ -21,16 +21,16 @@
         android:layout_weight="1"
         android:padding="16dp"
         android:text="TextView"
-        android:textColor="@color/white" />
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/item_price"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:text="TextView"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:padding="16dp"
         android:gravity="right"
         tools:text="122"
-        android:background="@color/colorShadow"/>
+        android:background="@color/colorShadow2"/>
 </LinearLayout>

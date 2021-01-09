@@ -2,12 +2,10 @@ package com.example.moneytracker;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
@@ -29,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private ActionMode actionMode = null;
     private Toolbar toolbar;
     private  FirebaseAuth mAuth;
+    private boolean isInitialized = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: button pressed");
                 int currentPage = pager.getCurrentItem();
                 String type = null;
                 if (currentPage == MainPagesAdapter.PAGE_INCOMES) {
@@ -129,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onActionModeStarted(mode);
         fab.hide();
         actionMode = mode;
-        Log.i(TAG, "onActionModeStarted: ");
     }
 
     @Override
@@ -137,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onActionModeFinished(mode);
         fab.show();
         actionMode = null;
-        Log.i(TAG, "onActionModeFinished: ");
     }
 
     @Override
@@ -145,13 +141,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            MainPagesAdapter adapter = new MainPagesAdapter(getSupportFragmentManager(), this);
-            pager.setAdapter(adapter);
-            Toast.makeText(this, "SUCCESS, " + currentUser.getUid(), Toast.LENGTH_SHORT).show();
+          //  if (!isInitialized){
+                MainPagesAdapter adapter = new MainPagesAdapter(getSupportFragmentManager(), this);
+                pager.setAdapter(adapter);
+                isInitialized= true;
+              //  Toast.makeText(this, "SUCCESS, " + currentUser.getUid(), Toast.LENGTH_SHORT).show();
+           // }
+
         }else{
             Intent intent = new Intent(MainActivity.this, AuthActivity.class);
             startActivity(intent);
-            Toast.makeText(this, "USER NULL", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "USER NULL", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -10,9 +10,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/background"
-        android:elevation="0dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"></Toolbar>
+        android:background="@color/main_color"
+        android:titleTextColor="@color/black"
+        android:elevation="0dp"></Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         android:orientation="horizontal"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
-        android:elevation="12dp">
+        android:elevation="8dp">
         <!-- android:background="@null"-->
         <EditText
             android:id="@+id/add_item_name"
@@ -31,7 +31,8 @@
             android:layout_weight="1"
             android:hint="@string/hint_add_item"
             android:inputType="text"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textCursorDrawable="@color/black" />
 
         <EditText
             android:id="@+id/add_item_price"
@@ -42,7 +43,8 @@
             android:gravity="right"
             android:hint="@string/rub"
             android:inputType="number"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textCursorDrawable="@color/black" />
 
         <Button
             android:id="@+id/add_item_btn"

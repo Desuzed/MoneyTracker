@@ -69,7 +69,7 @@ public class DiagramView extends View {
 
     public DiagramView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        incomePaint.setColor(getResources().getColor(R.color.balance_income));
-        expensePaint.setColor(getResources().getColor(R.color.balance_expense));
+        incomePaint.setColor(getResources().getColor(R.color.income_color));
+        expensePaint.setColor(getResources().getColor(R.color.expense_color));
     }
 }

@@ -8,6 +8,7 @@
     <string name="tab_expenses">Расход</string>
     <string name="tab_income">Доход</string>
     <string name="tab_balance">Баланс</string>
+    <string name="auth_hello">Приветствую в приложении </string>
 
     <string-array name="tab_titles">
         <item>@string/tab_expenses</item>
